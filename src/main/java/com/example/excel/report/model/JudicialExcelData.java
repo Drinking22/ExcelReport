@@ -1,5 +1,6 @@
 package com.example.excel.report.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -7,10 +8,12 @@ import java.time.LocalDateTime;
 
 @Data
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class JudicialExcelData {
 
     private int number;
     private String fullNameDebtor; //ФИО должника
+    private int personalAccountNumber; //номер лицнвого счета
     private String contract; //Договор
     private String period; //Период задолженности
     private int amountOfDebt; //Сумма долга

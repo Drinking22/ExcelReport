@@ -11,6 +11,7 @@ public class ExecutionProcessExcelData {
 
     private int number;
     private String fullNameDebtor; //ФИО должника
+    private int personalAccountNumber; //номер лицнвого счета
     private String numberOfWritExecution; //№ ИД
     private LocalDateTime dateOfExecutionWrit; //Дата получения ИД
     private int amountOfDebt; //Сумма долга

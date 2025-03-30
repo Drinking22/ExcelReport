@@ -11,6 +11,7 @@ public class LawsuitExcelData {
 
     private int number;
     private String fullNameDebtor; //ФИО должника
+    private int personalAccountNumber; //номер лицнвого счета
     private String contract; //Договор
     private String period; //Период задолженности
     private int amountOfDebt; //Сумма долга
