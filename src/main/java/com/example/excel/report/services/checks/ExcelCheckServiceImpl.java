@@ -3,7 +3,6 @@ package com.example.excel.report.services.checks;
 import com.example.excel.report.model.ExecutionProcessExcelData;
 import com.example.excel.report.model.JudicialExcelData;
 import com.example.excel.report.model.LawsuitExcelData;
-import com.example.excel.report.services.report.JudicialExcelWriterServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class JudicialFilesCheckServiceImpl implements JudicialFilesCheckService {
+public class ExcelCheckServiceImpl implements ExcelCheckService {
 
     private ConcurrentHashMap<String, JudicialExcelData> allReports;
 

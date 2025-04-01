@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class JudicialExcelWriterServiceImpl implements JudicialExcelWriterService {
+public class ExcelWriterServiceImpl implements ExcelWriterService {
 
     private final ColumnsExcelReport columnsExcelReport;
 

@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public interface JudicialExcelWriterService {
+public interface ExcelWriterService {
     FileOutputStream writeJudicialReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<JudicialExcelData>> allReports);
     FileOutputStream writeLawsuitReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<LawsuitExcelData>> allReports);
     FileOutputStream writeExecutionProcessReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<ExecutionProcessExcelData>> allReports);
