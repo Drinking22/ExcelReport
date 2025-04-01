@@ -16,7 +16,7 @@ public class ExecutionProcessExcelData {
     private final LocalDateTime dateOfExecutionWrit; //Дата получения ИД
     private final int amountOfDebt; //Сумма долга
     private final int amountOfRemainder; //Остаток долга
-    private final boolean isRepeatSubmission; //Повторное предъявление ИД после Акта ДА/НЕТ
+    private final String isRepeatSubmission; //Повторное предъявление ИД после Акта ДА/НЕТ
     private final LocalDateTime dateOfFilingApplicationFtx; //Дата подачи заявления ФНС
     private final LocalDateTime dateOfReceiptFtxResponse; //Дата получения ответа ФНС
     private final LocalDateTime dateOfWritExecutionSubmissionToBank; //Дата подачи ИД в Банк
@@ -34,11 +34,11 @@ public class ExecutionProcessExcelData {
     private final LocalDateTime dateOfFilingAnApplicationToTheCourtCas; // Дата подачи заявления в суд КАС
     private final String subjectOfAppealCourt; //Предмет обжалования в суде
     private final String courtDecision; //Судебное решение
-    private final boolean availabilityOfPlaceOfWork; //Наличие места работы ДА/НЕТ
+    private final String availabilityOfPlaceOfWork; //Наличие места работы ДА/НЕТ
     private final LocalDateTime dateOfSendingApplicationPlaceOfReceiptOfIncome; //Дата отправления заявления по месту получения дохода
-    private final boolean presenceVehicle; //Наличие ТС ДА/НЕТ
+    private final String presenceVehicle; //Наличие ТС ДА/НЕТ
     private final LocalDateTime measuresTakenVehicle; //Меры принятые по ТС
-    private final boolean presenceOfRealEstate; //Наличие недвижимости ДА/НЕТ
+    private final String presenceOfRealEstate; //Наличие недвижимости ДА/НЕТ
     private final String measuresTakenOnRealEstate; //Меры принятые по недвижимости
     private final LocalDateTime dateOfResolutionRestrictionOnExit; //Дата пост ограничения на выезд
     private final LocalDateTime dateOfExitToAddress; //Дата выхода в адрес

@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface ExcelParserService {
     List<JudicialExcelData> parseJudicialExcelFile(FileInputStream excelFile) throws IOException;
-    List<LawsuitExcelData> parseLawsuitExcelFile(FileInputStream excelFile);
-    List<ExecutionProcessExcelData> parseExecutionProcessExcelFile(FileInputStream excelFile);
+    List<LawsuitExcelData> parseLawsuitExcelFile(FileInputStream excelFile) throws IOException;
+    List<ExecutionProcessExcelData> parseExecutionProcessExcelFile(FileInputStream excelFile) throws IOException;
 }
