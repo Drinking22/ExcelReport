@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,10 +90,27 @@ public class ExcelParserServiceImpl implements ExcelParserService {
         LocalDateTime dateOfReceiptOfCourtOrder = getCellValueAsLocalDateTime(row.getCell(17), rowIndex, 17);
         String comment = getCellValueAsString(row.getCell(18), rowIndex, 18);
 
-        return new JudicialExcelData(number, fullNameDebtor, personalAccountNumber, contract, period, amountOfDebt, penalty, amountOfStateDuty,
-                numberOfStateDuty, dateOfSendingCopiesOfDocuments, dateOfFilingAnApplicationToTheCourt, judicialDistrict, dateOfDetermination,
-                dateOfReceiptOfDetermination, dateOfFilingAnApplicationInTheClaimProcedure, numberOfCourtOrder, dateOfCourtOrder,
-                dateOfReceiptOfCourtOrder, comment);
+        return JudicialExcelData.builder()
+                .number(number)
+                .fullNameDebtor(fullNameDebtor)
+                .personalAccountNumber(personalAccountNumber)
+                .contract(contract)
+                .period(period)
+                .amountOfDebt(amountOfDebt)
+                .penalty(penalty)
+                .amountOfStateDuty(amountOfStateDuty)
+                .numberOfStateDuty(numberOfStateDuty)
+                .dateOfSendingCopiesOfDocuments(dateOfSendingCopiesOfDocuments)
+                .dateOfFilingAnApplicationToTheCourt(dateOfFilingAnApplicationToTheCourt)
+                .judicialDistrict(judicialDistrict)
+                .dateOfDetermination(dateOfDetermination)
+                .dateOfReceiptOfDetermination(dateOfReceiptOfDetermination)
+                .dateOfFilingAnApplicationInTheClaimProcedure(dateOfFilingAnApplicationInTheClaimProcedure)
+                .numberOfCourtOrder(numberOfCourtOrder)
+                .dateOfCourtOrder(dateOfCourtOrder)
+                .dateOfReceiptOfCourtOrder(dateOfReceiptOfCourtOrder)
+                .comment(comment)
+                .build();
     }
 
     private int getCellValueAsInt(Cell cell, int rowIndex, int columnIndex) {
@@ -122,8 +142,21 @@ public class ExcelParserServiceImpl implements ExcelParserService {
             log.warn("Row {}: Cell at column {} is null, returning null.", rowIndex, columnIndex);
             return null;
         }
+
         if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
             return cell.getLocalDateTimeCellValue();
+        }
+
+        if (cell.getCellType() == CellType.STRING) {
+            String dateString = cell.getStringCellValue();
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                LocalDate date = LocalDate.parse(dateString, formatter);
+                return date.atStartOfDay();
+            } catch (DateTimeParseException ex) {
+                log.warn("Row {}: Cell at column {} contains invalid date string '{}', returning null.", rowIndex, columnIndex, dateString);
+                return null;
+            }
         }
         log.warn("Row {}: Cell at column {} is not a date, returning null.", rowIndex, columnIndex);
 

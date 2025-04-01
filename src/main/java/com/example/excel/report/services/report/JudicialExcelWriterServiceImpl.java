@@ -4,7 +4,7 @@ import com.example.excel.report.constant.titles.ExcelFileNameConst;
 import com.example.excel.report.model.ExecutionProcessExcelData;
 import com.example.excel.report.model.JudicialExcelData;
 import com.example.excel.report.model.LawsuitExcelData;
-import com.example.excel.report.util.ColumnsExcelReport;
+import com.example.excel.report.constant.ColumnsExcelReport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
