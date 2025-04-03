@@ -3,6 +3,7 @@ package com.example.excel.report.model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,8 +15,9 @@ public class ExecutionProcessExcelData {
     private final int personalAccountNumber; //номер лицевого счета
     private final String numberOfWritExecution; //№ ИД
     private final LocalDateTime dateOfExecutionWrit; //Дата получения ИД
-    private final int amountOfDebt; //Сумма долга
-    private final int amountOfRemainder; //Остаток долга
+    private final BigDecimal amountOfDebt; //Сумма долга
+    private final LocalDateTime debtRepaymentDate; //дата погашения задолженности
+    private final BigDecimal amountOfRemainder; //Остаток долга
     private final String isRepeatSubmission; //Повторное предъявление ИД после Акта ДА/НЕТ
     private final LocalDateTime dateOfFilingApplicationFtx; //Дата подачи заявления ФНС
     private final LocalDateTime dateOfReceiptFtxResponse; //Дата получения ответа ФНС

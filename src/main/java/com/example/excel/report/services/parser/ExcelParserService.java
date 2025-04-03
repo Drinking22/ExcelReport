@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ExcelParserService {
-    List<JudicialExcelData> parseJudicialExcelFile(FileInputStream excelFile) throws IOException;
-    List<LawsuitExcelData> parseLawsuitExcelFile(FileInputStream excelFile) throws IOException;
-    List<ExecutionProcessExcelData> parseExecutionProcessExcelFile(FileInputStream excelFile) throws IOException;
+    List<JudicialExcelData> parseJudicialExcelFileWithoutRepaymentOfDebt(FileInputStream excelFile) throws IOException;
+    List<LawsuitExcelData> parseLawsuitExcelFileWithoutRepaymentOfDebt(FileInputStream excelFile) throws IOException;
+    List<ExecutionProcessExcelData> parseExecutionProcessExcelFileWithoutRepaymentOfDebt(FileInputStream excelFile) throws IOException;
 }

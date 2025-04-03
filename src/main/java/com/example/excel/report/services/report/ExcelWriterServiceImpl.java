@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -21,17 +21,17 @@ public class ExcelWriterServiceImpl implements ExcelWriterService {
     private final ColumnsExcelReport columnsExcelReport;
 
     @Override
-    public FileOutputStream writeJudicialReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<JudicialExcelData>> allReports) {
+    public FileOutputStream writeJudicialReportExcelFile(ExcelFileNameConst fileName, Map<String, List<JudicialExcelData>> allReports) {
         return null;
     }
 
     @Override
-    public FileOutputStream writeLawsuitReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<LawsuitExcelData>> allReports) {
+    public FileOutputStream writeLawsuitReportExcelFile(ExcelFileNameConst fileName, Map<String, List<LawsuitExcelData>> allReports) {
         return null;
     }
 
     @Override
-    public FileOutputStream writeExecutionProcessReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<ExecutionProcessExcelData>> allReports) {
+    public FileOutputStream writeExecutionProcessReportExcelFile(ExcelFileNameConst fileName, Map<String, List<ExecutionProcessExcelData>> allReports) {
         return null;
     }
 }

@@ -3,6 +3,7 @@ package com.example.excel.report.model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,15 +15,17 @@ public class JudicialExcelData {
     private final int personalAccountNumber; //номер лицевого счета
     private final String contract; //Договор
     private final String period; //Период задолженности
-    private final int amountOfDebt; //Сумма долга
-    private final int penalty; //Пени
-    private final int amountOfStateDuty; //Сумма ГП
-    private final int numberOfStateDuty; //№ ГП
+    private final BigDecimal amountOfDebt; //Сумма долга
+    private final LocalDateTime debtRepaymentDate; //дата погашения задолженности
+    private final BigDecimal penalty; //Пени
+    private final BigDecimal amountOfStateDuty; //Сумма ГП
+    private final String numberOfStateDuty; //№ ГП
     private final LocalDateTime dateOfSendingCopiesOfDocuments; //Дата отправления копий документов
     private final LocalDateTime dateOfFilingAnApplicationToTheCourt; //Дата подачи заявления в суд
     private final String judicialDistrict; //Судебный участок
     private final LocalDateTime dateOfDetermination; //Дата определения
-    private final LocalDateTime dateOfReceiptOfDetermination; //Дата получения определения
+    private final LocalDateTime determinationOnTheReturnOfTheApplication; //Определение о возращении заявления
+    private final LocalDateTime determinationToCancelTheJointVenture; //Определение об отмене СП
     private final LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure; //Дата подачи заявления в исковом порядке
     private final String numberOfCourtOrder; //№ судебного приказа
     private final LocalDateTime dateOfCourtOrder; //Дата СП

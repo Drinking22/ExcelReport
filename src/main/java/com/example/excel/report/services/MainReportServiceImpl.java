@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class MainReportServiceImpl implements MainReportService {
         try {
             List<JudicialExcelData> judicialExcelData = parseJudicialData(excelFile);
 
-            ConcurrentHashMap<String, List<JudicialExcelData>> allReportsForMonthly =
+            Map<String, List<JudicialExcelData>> allReportsForMonthly =
                     excelCheckService.generateJudicialMonthlyReport(judicialExcelData);
 
 
@@ -54,7 +54,7 @@ public class MainReportServiceImpl implements MainReportService {
         try {
             List<JudicialExcelData> judicialExcelData = parseJudicialData(excelFile);
 
-            ConcurrentHashMap<String, List<JudicialExcelData>> allReportsForWeekly =
+            Map<String, List<JudicialExcelData>> allReportsForWeekly =
                     excelCheckService.generateJudicialWeeklyReport(judicialExcelData);
 
             return writeJudicialReportInExcelFile(fileName, allReportsForWeekly);
@@ -71,7 +71,7 @@ public class MainReportServiceImpl implements MainReportService {
         try {
             List<LawsuitExcelData> lawsuitExcelData = parseLawsuitData(excelFile);
 
-            ConcurrentHashMap<String, List<LawsuitExcelData>> allReportsForMonthly =
+            Map<String, List<LawsuitExcelData>> allReportsForMonthly =
                     excelCheckService.generateLawsuitMonthlyReport(lawsuitExcelData);
 
             return writeLawsuitReportInExcelFile(fileName, allReportsForMonthly);
@@ -88,7 +88,7 @@ public class MainReportServiceImpl implements MainReportService {
         try {
             List<LawsuitExcelData> lawsuitExcelData = parseLawsuitData(excelFile);
 
-            ConcurrentHashMap<String, List<LawsuitExcelData>> allReportsForWeekly =
+            Map<String, List<LawsuitExcelData>> allReportsForWeekly =
                     excelCheckService.generateLawsuitWeeklyReport(lawsuitExcelData);
 
             return writeLawsuitReportInExcelFile(fileName, allReportsForWeekly);
@@ -105,7 +105,7 @@ public class MainReportServiceImpl implements MainReportService {
         try {
             List<ExecutionProcessExcelData> executionProcessExcelData = parseExecutionProcessData(excelFile);
 
-            ConcurrentHashMap<String, List<ExecutionProcessExcelData>> allReportsForMonthly =
+            Map<String, List<ExecutionProcessExcelData>> allReportsForMonthly =
                     excelCheckService.generateExecutionProcessMonthlyReport(executionProcessExcelData);
 
             return writeExecutionProcessReportInExcelFile(fileName, allReportsForMonthly);
@@ -121,7 +121,7 @@ public class MainReportServiceImpl implements MainReportService {
         try {
             List<ExecutionProcessExcelData> executionProcessExcelData = parseExecutionProcessData(excelFile);
 
-            ConcurrentHashMap<String, List<ExecutionProcessExcelData>> allReportsForWeekly =
+            Map<String, List<ExecutionProcessExcelData>> allReportsForWeekly =
                     excelCheckService.generateExecutionProcessWeeklyReport(executionProcessExcelData);
 
             return writeExecutionProcessReportInExcelFile(fileName, allReportsForWeekly);
@@ -132,29 +132,29 @@ public class MainReportServiceImpl implements MainReportService {
     }
 
     private List<JudicialExcelData> parseJudicialData(FileInputStream excelFile) throws IOException {
-        return excelParserService.parseJudicialExcelFile(excelFile);
+        return excelParserService.parseJudicialExcelFileWithoutRepaymentOfDebt(excelFile);
     }
 
     private List<LawsuitExcelData> parseLawsuitData(FileInputStream excelFile) throws IOException {
-        return excelParserService.parseLawsuitExcelFile(excelFile);
+        return excelParserService.parseLawsuitExcelFileWithoutRepaymentOfDebt(excelFile);
     }
 
     private List<ExecutionProcessExcelData> parseExecutionProcessData(FileInputStream excelFile) throws IOException {
-        return excelParserService.parseExecutionProcessExcelFile(excelFile);
+        return excelParserService.parseExecutionProcessExcelFileWithoutRepaymentOfDebt(excelFile);
     }
 
-    private FileOutputStream writeJudicialReportInExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String,
-            List<JudicialExcelData>> allReports) {
+    private FileOutputStream writeJudicialReportInExcelFile(ExcelFileNameConst fileName,
+                                                            Map<String, List<JudicialExcelData>> allReports) {
         return excelWriterService.writeJudicialReportExcelFile(fileName, allReports);
     }
 
-    private FileOutputStream writeLawsuitReportInExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String,
-            List<LawsuitExcelData>> allReports) {
+    private FileOutputStream writeLawsuitReportInExcelFile(ExcelFileNameConst fileName,
+                                                           Map<String, List<LawsuitExcelData>> allReports) {
         return excelWriterService.writeLawsuitReportExcelFile(fileName, allReports);
     }
 
-    private FileOutputStream writeExecutionProcessReportInExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String,
-            List<ExecutionProcessExcelData>> allReports) {
+    private FileOutputStream writeExecutionProcessReportInExcelFile(ExcelFileNameConst fileName,
+                                                                    Map<String, List<ExecutionProcessExcelData>> allReports) {
         return excelWriterService.writeExecutionProcessReportExcelFile(fileName, allReports);
     }
 }

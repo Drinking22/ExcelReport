@@ -7,10 +7,10 @@ import com.example.excel.report.model.LawsuitExcelData;
 
 import java.io.FileOutputStream;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 public interface ExcelWriterService {
-    FileOutputStream writeJudicialReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<JudicialExcelData>> allReports);
-    FileOutputStream writeLawsuitReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<LawsuitExcelData>> allReports);
-    FileOutputStream writeExecutionProcessReportExcelFile(ExcelFileNameConst fileName, ConcurrentHashMap<String, List<ExecutionProcessExcelData>> allReports);
+    FileOutputStream writeJudicialReportExcelFile(ExcelFileNameConst fileName, Map<String, List<JudicialExcelData>> allReports);
+    FileOutputStream writeLawsuitReportExcelFile(ExcelFileNameConst fileName, Map<String, List<LawsuitExcelData>> allReports);
+    FileOutputStream writeExecutionProcessReportExcelFile(ExcelFileNameConst fileName, Map<String, List<ExecutionProcessExcelData>> allReports);
 }

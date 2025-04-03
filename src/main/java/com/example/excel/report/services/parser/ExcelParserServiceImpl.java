@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +27,7 @@ public class ExcelParserServiceImpl implements ExcelParserService {
     private final GenerateExcelFile generateExcelFile;
 
     @Override
-    public List<JudicialExcelData> parseJudicialExcelFile(FileInputStream excelFile) throws IOException {
+    public List<JudicialExcelData> parseJudicialExcelFileWithoutRepaymentOfDebt(FileInputStream excelFile) throws IOException {
         log.info("Parse sheet judicial work from excel file");
 
         List<JudicialExcelData> judicialExcelData = new ArrayList<>();
@@ -40,8 +41,12 @@ public class ExcelParserServiceImpl implements ExcelParserService {
                 Row row = judicialSheet.getRow(i);
                 if (row != null) {
                     JudicialExcelData judicialExcelModel = createJudicialModel(row, i);
-                    judicialExcelData.add(judicialExcelModel);
-                    log.info("Judicial model {} added to list", judicialExcelModel.getPersonalAccountNumber());
+                    if (judicialExcelModel.getDebtRepaymentDate() == null) {
+                        judicialExcelData.add(judicialExcelModel);
+                        log.info("Judicial model without repayments {} added to list", judicialExcelModel.getPersonalAccountNumber());
+                    }
+                } else {
+                    log.warn("Row in sheet judicial work is {} is null, skipping.", i);
                 }
             }
         }
@@ -51,7 +56,7 @@ public class ExcelParserServiceImpl implements ExcelParserService {
     }
 
     @Override
-    public List<LawsuitExcelData> parseLawsuitExcelFile(FileInputStream excelFile) throws IOException {
+    public List<LawsuitExcelData> parseLawsuitExcelFileWithoutRepaymentOfDebt(FileInputStream excelFile) throws IOException {
         log.info("Parse sheet lawsuit work from excel file");
 
         List<LawsuitExcelData> lawsuitExcelData = new ArrayList<>();
@@ -65,8 +70,12 @@ public class ExcelParserServiceImpl implements ExcelParserService {
                 Row row = lawsuitSheet.getRow(i);
                 if (row != null) {
                     LawsuitExcelData lawsuitExcelModel = createLawsuitModel(row, i);
-                    lawsuitExcelData.add(lawsuitExcelModel);
-                    log.info("Lawsuit model {} added to list", lawsuitExcelModel.getPersonalAccountNumber());
+                    if (lawsuitExcelModel.getDebtRepaymentDate() == null) {
+                        lawsuitExcelData.add(lawsuitExcelModel);
+                        log.info("Lawsuit model {} added to list", lawsuitExcelModel.getPersonalAccountNumber());
+                    }
+                } else {
+                    log.warn("Row in sheet lawsuit work {} is null, skipping.", i);
                 }
             }
         }
@@ -76,7 +85,7 @@ public class ExcelParserServiceImpl implements ExcelParserService {
     }
 
     @Override
-    public List<ExecutionProcessExcelData> parseExecutionProcessExcelFile(FileInputStream excelFile) throws IOException {
+    public List<ExecutionProcessExcelData> parseExecutionProcessExcelFileWithoutRepaymentOfDebt(FileInputStream excelFile) throws IOException {
         log.info("Parse sheet execution process work from excel file");
 
         List<ExecutionProcessExcelData> executionProcessExcelData = new ArrayList<>();
@@ -90,8 +99,12 @@ public class ExcelParserServiceImpl implements ExcelParserService {
                 Row row = executionProcessSheet.getRow(i);
                 if (row != null) {
                     ExecutionProcessExcelData executionProcessExcelModel = createExecutionProcessModel(row, i);
-                    executionProcessExcelData.add(executionProcessExcelModel);
-                    log.info("Execution process model {} added to list", executionProcessExcelModel.getPersonalAccountNumber());
+                    if (executionProcessExcelModel.getDebtRepaymentDate() == null) {
+                        executionProcessExcelData.add(executionProcessExcelModel);
+                        log.info("Execution process model {} added to list", executionProcessExcelModel.getPersonalAccountNumber());
+                    }
+                } else {
+                    log.warn("Row in sheet execution process work {} is null, skipping.", i);
                 }
             }
         }
@@ -113,20 +126,22 @@ public class ExcelParserServiceImpl implements ExcelParserService {
         int personalAccountNumber = getCellValueAsInt(row.getCell(2), rowIndex, 2);
         String contract = getCellValueAsString(row.getCell(3), rowIndex, 3);
         String period = getCellValueAsString(row.getCell(4), rowIndex, 4);
-        int amountOfDebt = getCellValueAsInt(row.getCell(5), rowIndex, 5);
-        int penalty = getCellValueAsInt(row.getCell(6), rowIndex, 6);
-        int amountOfStateDuty = getCellValueAsInt(row.getCell(7), rowIndex, 7);
-        int numberOfStateDuty = getCellValueAsInt(row.getCell(8), rowIndex, 8);
-        LocalDateTime dateOfSendingCopiesOfDocuments = getCellValueAsLocalDateTime(row.getCell(9), rowIndex, 9);
-        LocalDateTime dateOfFilingAnApplicationToTheCourt = getCellValueAsLocalDateTime(row.getCell(10), rowIndex, 10);
-        String judicialDistrict = getCellValueAsString(row.getCell(11), rowIndex, 11);
-        LocalDateTime dateOfDetermination = getCellValueAsLocalDateTime(row.getCell(12), rowIndex, 12);
-        LocalDateTime dateOfReceiptOfDetermination = getCellValueAsLocalDateTime(row.getCell(13), rowIndex, 13);
-        LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure = getCellValueAsLocalDateTime(row.getCell(14), rowIndex, 14);
-        String numberOfCourtOrder = getCellValueAsString(row.getCell(15), rowIndex, 15);
-        LocalDateTime dateOfCourtOrder = getCellValueAsLocalDateTime(row.getCell(16), rowIndex, 16);
-        LocalDateTime dateOfReceiptOfCourtOrder = getCellValueAsLocalDateTime(row.getCell(17), rowIndex, 17);
-        String comment = getCellValueAsString(row.getCell(18), rowIndex, 18);
+        BigDecimal amountOfDebt = getCellValueAsBigDecimal(row.getCell(5), rowIndex, 5);
+        LocalDateTime debtRepaymentDate = getCellValueAsLocalDateTime(row.getCell(6), rowIndex, 6);
+        BigDecimal penalty = getCellValueAsBigDecimal(row.getCell(7), rowIndex, 7);
+        BigDecimal amountOfStateDuty = getCellValueAsBigDecimal(row.getCell(8), rowIndex, 8);
+        String numberOfStateDuty = getCellValueAsString(row.getCell(9), rowIndex, 9);
+        LocalDateTime dateOfSendingCopiesOfDocuments = getCellValueAsLocalDateTime(row.getCell(10), rowIndex, 10);
+        LocalDateTime dateOfFilingAnApplicationToTheCourt = getCellValueAsLocalDateTime(row.getCell(11), rowIndex, 11);
+        String judicialDistrict = getCellValueAsString(row.getCell(12), rowIndex, 12);
+        LocalDateTime dateOfDetermination = getCellValueAsLocalDateTime(row.getCell(13), rowIndex, 13);
+        LocalDateTime determinationOnTheReturnOfTheApplication = getCellValueAsLocalDateTime(row.getCell(14), rowIndex, 14);
+        LocalDateTime determinationToCancelTheJointVenture = getCellValueAsLocalDateTime(row.getCell(15), rowIndex, 15);
+        LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure = getCellValueAsLocalDateTime(row.getCell(16), rowIndex, 16);
+        String numberOfCourtOrder = getCellValueAsString(row.getCell(17), rowIndex, 17);
+        LocalDateTime dateOfCourtOrder = getCellValueAsLocalDateTime(row.getCell(18), rowIndex, 18);
+        LocalDateTime dateOfReceiptOfCourtOrder = getCellValueAsLocalDateTime(row.getCell(19), rowIndex, 19);
+        String comment = getCellValueAsString(row.getCell(20), rowIndex, 20);
 
         return JudicialExcelData.builder()
                 .number(number)
@@ -135,6 +150,7 @@ public class ExcelParserServiceImpl implements ExcelParserService {
                 .contract(contract)
                 .period(period)
                 .amountOfDebt(amountOfDebt)
+                .debtRepaymentDate(debtRepaymentDate)
                 .penalty(penalty)
                 .amountOfStateDuty(amountOfStateDuty)
                 .numberOfStateDuty(numberOfStateDuty)
@@ -142,7 +158,8 @@ public class ExcelParserServiceImpl implements ExcelParserService {
                 .dateOfFilingAnApplicationToTheCourt(dateOfFilingAnApplicationToTheCourt)
                 .judicialDistrict(judicialDistrict)
                 .dateOfDetermination(dateOfDetermination)
-                .dateOfReceiptOfDetermination(dateOfReceiptOfDetermination)
+                .determinationOnTheReturnOfTheApplication(determinationOnTheReturnOfTheApplication)
+                .determinationToCancelTheJointVenture(determinationToCancelTheJointVenture)
                 .dateOfFilingAnApplicationInTheClaimProcedure(dateOfFilingAnApplicationInTheClaimProcedure)
                 .numberOfCourtOrder(numberOfCourtOrder)
                 .dateOfCourtOrder(dateOfCourtOrder)
@@ -159,20 +176,21 @@ public class ExcelParserServiceImpl implements ExcelParserService {
         int personalAccountNumber = getCellValueAsInt(row.getCell(2), rowIndex, 2);
         String contract = getCellValueAsString(row.getCell(3), rowIndex, 3);
         String period = getCellValueAsString(row.getCell(4), rowIndex, 4);
-        int amountOfDebt = getCellValueAsInt(row.getCell(5), rowIndex, 5);
-        int penalty = getCellValueAsInt(row.getCell(6), rowIndex, 6);
-        int amountOfStateDuty = getCellValueAsInt(row.getCell(7), rowIndex, 7);
-        int numberOfStateDuty = getCellValueAsInt(row.getCell(8), rowIndex, 8);
-        String judicialDistrict = getCellValueAsString(row.getCell(9), rowIndex, 9);
-        LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure = getCellValueAsLocalDateTime(row.getCell(10), rowIndex, 10);
-        LocalDateTime dateCaseReview = getCellValueAsLocalDateTime(row.getCell(11), rowIndex, 11);
-        String courtDecisionAndCaseNumber = getCellValueAsString(row.getCell(12), rowIndex, 12);
-        LocalDateTime dateOfTheDecision = getCellValueAsLocalDateTime(row.getCell(13), rowIndex, 13);
-        LocalDateTime effectiveDate = getCellValueAsLocalDateTime(row.getCell(14), rowIndex, 14);
-        String numberOfWritExecution = getCellValueAsString(row.getCell(15), rowIndex, 15);
-        LocalDateTime dateOfExecutionWrit = getCellValueAsLocalDateTime(row.getCell(16), rowIndex, 16);
-        LocalDateTime dateOfReceiptExecution = getCellValueAsLocalDateTime(row.getCell(17), rowIndex, 17);
-        String comment = getCellValueAsString(row.getCell(18), rowIndex, 18);
+        BigDecimal amountOfDebt = getCellValueAsBigDecimal(row.getCell(5), rowIndex, 5);
+        LocalDateTime debtRepaymentDate = getCellValueAsLocalDateTime(row.getCell(6), rowIndex, 6);
+        BigDecimal penalty = getCellValueAsBigDecimal(row.getCell(7), rowIndex, 7);
+        BigDecimal amountOfStateDuty = getCellValueAsBigDecimal(row.getCell(8), rowIndex, 8);
+        String numberOfStateDuty = getCellValueAsString(row.getCell(9), rowIndex, 9);
+        String judicialDistrict = getCellValueAsString(row.getCell(10), rowIndex, 10);
+        LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure = getCellValueAsLocalDateTime(row.getCell(11), rowIndex, 11);
+        LocalDateTime dateCaseReview = getCellValueAsLocalDateTime(row.getCell(12), rowIndex, 12);
+        String courtDecisionAndCaseNumber = getCellValueAsString(row.getCell(13), rowIndex, 13);
+        LocalDateTime dateOfTheDecision = getCellValueAsLocalDateTime(row.getCell(14), rowIndex, 14);
+        LocalDateTime effectiveDate = getCellValueAsLocalDateTime(row.getCell(15), rowIndex, 15);
+        String numberOfWritExecution = getCellValueAsString(row.getCell(16), rowIndex, 16);
+        LocalDateTime dateOfExecutionWrit = getCellValueAsLocalDateTime(row.getCell(17), rowIndex, 17);
+        LocalDateTime dateOfReceiptExecution = getCellValueAsLocalDateTime(row.getCell(18), rowIndex, 18);
+        String comment = getCellValueAsString(row.getCell(19), rowIndex, 19);
 
         return LawsuitExcelData.builder()
                 .number(number)
@@ -181,6 +199,7 @@ public class ExcelParserServiceImpl implements ExcelParserService {
                 .contract(contract)
                 .period(period)
                 .amountOfDebt(amountOfDebt)
+                .debtRepaymentDate(debtRepaymentDate)
                 .penalty(penalty)
                 .amountOfStateDuty(amountOfStateDuty)
                 .numberOfStateDuty(numberOfStateDuty)
@@ -205,42 +224,43 @@ public class ExcelParserServiceImpl implements ExcelParserService {
         int personalAccountNumber = getCellValueAsInt(row.getCell(2), rowIndex, 2);
         String numberOfWritExecution = getCellValueAsString(row.getCell(3), rowIndex, 3);
         LocalDateTime dateOfExecutionWrit = getCellValueAsLocalDateTime(row.getCell(4), rowIndex, 4);
-        int amountOfDebt = getCellValueAsInt(row.getCell(5), rowIndex, 5);
-        int amountOfRemainder = getCellValueAsInt(row.getCell(6), rowIndex, 6);
-        String isRepeatSubmission = getCellValueAsString(row.getCell(7), rowIndex, 7);
-        LocalDateTime dateOfFilingApplicationFtx = getCellValueAsLocalDateTime(row.getCell(8), rowIndex, 8);
-        LocalDateTime dateOfReceiptFtxResponse = getCellValueAsLocalDateTime(row.getCell(9), rowIndex, 9);
-        LocalDateTime dateOfWritExecutionSubmissionToBank = getCellValueAsLocalDateTime(row.getCell(10), rowIndex, 10);
-        String bank = getCellValueAsString(row.getCell(11), rowIndex, 11);
-        LocalDateTime dateOfWithdrawalFromBank = getCellValueAsLocalDateTime(row.getCell(12), rowIndex, 12);
-        LocalDateTime dateOfSubmissionWritExecutionBailiffs = getCellValueAsLocalDateTime(row.getCell(13), rowIndex, 13);
-        LocalDateTime dateOfReceiptOfTheDecisionToRefuseCollection = getCellValueAsLocalDateTime(row.getCell(14), rowIndex, 14);
-        LocalDateTime dateOFilingAnApplicationForNonInitiationOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(15), rowIndex, 15);
-        LocalDateTime dateOfInitiationOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(16), rowIndex, 16);
-        String numberOfEnforcementProceedings = getCellValueAsString(row.getCell(17), rowIndex, 17);
-        LocalDateTime dateOfFilingAnApplicationProgressOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(18), rowIndex, 18);
-        LocalDateTime dateOfFilingTheComplaint = getCellValueAsLocalDateTime(row.getCell(19), rowIndex, 19);
-        String subjectOfAppeal = getCellValueAsString(row.getCell(20), rowIndex, 20);
-        String resultOfTheComplaintReview = getCellValueAsString(row.getCell(21), rowIndex, 21);
-        LocalDateTime dateOfFilingAnApplicationToTheCourtCas = getCellValueAsLocalDateTime(row.getCell(22), rowIndex, 22);
-        String subjectOfAppealCourt = getCellValueAsString(row.getCell(23), rowIndex, 23);
-        String courtDecision = getCellValueAsString(row.getCell(24), rowIndex, 24);
-        String availabilityOfPlaceOfWork = getCellValueAsString(row.getCell(25), rowIndex, 25);
-        LocalDateTime dateOfSendingApplicationPlaceOfReceiptOfIncome = getCellValueAsLocalDateTime(row.getCell(26), rowIndex, 26);
-        String presenceVehicle = getCellValueAsString(row.getCell(27), rowIndex, 27);
-        LocalDateTime measuresTakenVehicle = getCellValueAsLocalDateTime(row.getCell(28), rowIndex, 28);
-        String presenceOfRealEstate = getCellValueAsString(row.getCell(29), rowIndex, 29);
-        String measuresTakenOnRealEstate = getCellValueAsString(row.getCell(30), rowIndex, 30);
-        LocalDateTime dateOfResolutionRestrictionOnExit = getCellValueAsLocalDateTime(row.getCell(31), rowIndex, 31);
-        LocalDateTime dateOfExitToAddress = getCellValueAsLocalDateTime(row.getCell(32), rowIndex, 32);
-        String resultOfExit = getCellValueAsString(row.getCell(33), rowIndex, 33);
-        LocalDateTime dateOfActualTerminationOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(34), rowIndex, 34);
-        LocalDateTime dateOfIssuanceOfResolutionOfReturnOfExecutionWrit = getCellValueAsLocalDateTime(row.getCell(35), rowIndex, 35);
-        String article = getCellValueAsString(row.getCell(36), rowIndex, 36);
-        String part = getCellValueAsString(row.getCell(37), rowIndex, 37);
-        LocalDateTime dateOfTerminationOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(38), rowIndex, 38);
-        String reasonForTerminationOfEnforcementProceedings = getCellValueAsString(row.getCell(39), rowIndex, 39);
-        String comment = getCellValueAsString(row.getCell(40), rowIndex, 40);
+        BigDecimal amountOfDebt = getCellValueAsBigDecimal(row.getCell(5), rowIndex, 5);
+        LocalDateTime debtRepaymentDate = getCellValueAsLocalDateTime(row.getCell(6), rowIndex, 6);
+        BigDecimal amountOfRemainder = getCellValueAsBigDecimal(row.getCell(7), rowIndex, 7);
+        String isRepeatSubmission = getCellValueAsString(row.getCell(8), rowIndex, 8);
+        LocalDateTime dateOfFilingApplicationFtx = getCellValueAsLocalDateTime(row.getCell(9), rowIndex, 9);
+        LocalDateTime dateOfReceiptFtxResponse = getCellValueAsLocalDateTime(row.getCell(10), rowIndex, 10);
+        LocalDateTime dateOfWritExecutionSubmissionToBank = getCellValueAsLocalDateTime(row.getCell(11), rowIndex, 11);
+        String bank = getCellValueAsString(row.getCell(12), rowIndex, 12);
+        LocalDateTime dateOfWithdrawalFromBank = getCellValueAsLocalDateTime(row.getCell(13), rowIndex, 13);
+        LocalDateTime dateOfSubmissionWritExecutionBailiffs = getCellValueAsLocalDateTime(row.getCell(14), rowIndex, 14);
+        LocalDateTime dateOfReceiptOfTheDecisionToRefuseCollection = getCellValueAsLocalDateTime(row.getCell(15), rowIndex, 15);
+        LocalDateTime dateOFilingAnApplicationForNonInitiationOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(16), rowIndex, 16);
+        LocalDateTime dateOfInitiationOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(17), rowIndex, 17);
+        String numberOfEnforcementProceedings = getCellValueAsString(row.getCell(18), rowIndex, 18);
+        LocalDateTime dateOfFilingAnApplicationProgressOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(19), rowIndex, 19);
+        LocalDateTime dateOfFilingTheComplaint = getCellValueAsLocalDateTime(row.getCell(20), rowIndex, 20);
+        String subjectOfAppeal = getCellValueAsString(row.getCell(21), rowIndex, 21);
+        String resultOfTheComplaintReview = getCellValueAsString(row.getCell(22), rowIndex, 22);
+        LocalDateTime dateOfFilingAnApplicationToTheCourtCas = getCellValueAsLocalDateTime(row.getCell(23), rowIndex, 23);
+        String subjectOfAppealCourt = getCellValueAsString(row.getCell(24), rowIndex, 24);
+        String courtDecision = getCellValueAsString(row.getCell(25), rowIndex, 25);
+        String availabilityOfPlaceOfWork = getCellValueAsString(row.getCell(26), rowIndex, 26);
+        LocalDateTime dateOfSendingApplicationPlaceOfReceiptOfIncome = getCellValueAsLocalDateTime(row.getCell(27), rowIndex, 27);
+        String presenceVehicle = getCellValueAsString(row.getCell(28), rowIndex, 28);
+        LocalDateTime measuresTakenVehicle = getCellValueAsLocalDateTime(row.getCell(29), rowIndex, 29);
+        String presenceOfRealEstate = getCellValueAsString(row.getCell(30), rowIndex, 30);
+        String measuresTakenOnRealEstate = getCellValueAsString(row.getCell(31), rowIndex, 31);
+        LocalDateTime dateOfResolutionRestrictionOnExit = getCellValueAsLocalDateTime(row.getCell(32), rowIndex, 32);
+        LocalDateTime dateOfExitToAddress = getCellValueAsLocalDateTime(row.getCell(33), rowIndex, 33);
+        String resultOfExit = getCellValueAsString(row.getCell(34), rowIndex, 34);
+        LocalDateTime dateOfActualTerminationOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(35), rowIndex, 35);
+        LocalDateTime dateOfIssuanceOfResolutionOfReturnOfExecutionWrit = getCellValueAsLocalDateTime(row.getCell(36), rowIndex, 36);
+        String article = getCellValueAsString(row.getCell(37), rowIndex, 37);
+        String part = getCellValueAsString(row.getCell(38), rowIndex, 38);
+        LocalDateTime dateOfTerminationOfEnforcementProceedings = getCellValueAsLocalDateTime(row.getCell(39), rowIndex, 39);
+        String reasonForTerminationOfEnforcementProceedings = getCellValueAsString(row.getCell(40), rowIndex, 40);
+        String comment = getCellValueAsString(row.getCell(41), rowIndex, 41);
 
         return ExecutionProcessExcelData.builder()
                 .number(number)
@@ -249,6 +269,7 @@ public class ExcelParserServiceImpl implements ExcelParserService {
                 .numberOfWritExecution(numberOfWritExecution)
                 .dateOfExecutionWrit(dateOfExecutionWrit)
                 .amountOfDebt(amountOfDebt)
+                .debtRepaymentDate(debtRepaymentDate)
                 .amountOfRemainder(amountOfRemainder)
                 .isRepeatSubmission(isRepeatSubmission)
                 .dateOfFilingApplicationFtx(dateOfFilingApplicationFtx)
@@ -335,5 +356,18 @@ public class ExcelParserServiceImpl implements ExcelParserService {
         log.warn("Row {}: Cell at column {} is not a date, returning null.", rowIndex, columnIndex);
 
         return null;
+    }
+
+    private BigDecimal getCellValueAsBigDecimal(Cell cell, int rowIndex, int columnIndex) {
+        if (cell == null) {
+            log.warn("Row {}: Cell at column {} is null, returning default value 0.0.", rowIndex, columnIndex);
+            return BigDecimal.ZERO;
+        }
+
+        if (cell.getCellType() != CellType.NUMERIC) {
+            log.warn("Row {}: Cell at column {} is not numeric (type: {}), returning default value 0.0.", rowIndex, columnIndex, cell.getCellType());
+            return BigDecimal.ZERO;
+        }
+        return BigDecimal.valueOf(cell.getNumericCellValue());
     }
 }
