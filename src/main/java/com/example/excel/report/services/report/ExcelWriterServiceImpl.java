@@ -1,6 +1,7 @@
 package com.example.excel.report.services.report;
 
 import com.example.excel.report.constant.titles.ExcelFileNameConst;
+import com.example.excel.report.constant.titles.ExcelJudicialSheetsNameConst;
 import com.example.excel.report.model.ExecutionProcessExcelData;
 import com.example.excel.report.model.JudicialExcelData;
 import com.example.excel.report.model.LawsuitExcelData;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class ExcelWriterServiceImpl implements ExcelWriterService {
 
     private final ColumnsExcelReport columnsExcelReport;
+    private final ExcelJudicialSheetsNameConst excelJudicialSheetsNameConst;
 
     @Override
     public FileOutputStream writeJudicialReportExcelFile(ExcelFileNameConst fileName, Map<String, List<JudicialExcelData>> allReports) {
