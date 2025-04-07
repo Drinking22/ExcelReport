@@ -135,8 +135,8 @@ public class ExcelParserServiceImpl implements ExcelParserService {
         LocalDateTime dateOfFilingAnApplicationToTheCourt = getCellValueAsLocalDateTime(row.getCell(11), rowIndex, 11);
         String judicialDistrict = getCellValueAsString(row.getCell(12), rowIndex, 12);
         LocalDateTime dateOfDetermination = getCellValueAsLocalDateTime(row.getCell(13), rowIndex, 13);
-        LocalDateTime determinationOnTheReturnOfTheApplication = getCellValueAsLocalDateTime(row.getCell(14), rowIndex, 14);
-        LocalDateTime determinationToCancelTheJointVenture = getCellValueAsLocalDateTime(row.getCell(15), rowIndex, 15);
+        String determinationOnTheReturnOfTheApplication = getCellValueAsString(row.getCell(14), rowIndex, 14);
+        String determinationToCancelTheJointVenture = getCellValueAsString(row.getCell(15), rowIndex, 15);
         LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure = getCellValueAsLocalDateTime(row.getCell(16), rowIndex, 16);
         String numberOfCourtOrder = getCellValueAsString(row.getCell(17), rowIndex, 17);
         LocalDateTime dateOfCourtOrder = getCellValueAsLocalDateTime(row.getCell(18), rowIndex, 18);

@@ -69,15 +69,15 @@ public class ExcelCheckServiceImpl implements ExcelCheckService {
         Map<String, List<JudicialExcelData>> judicialReport = new HashMap<>();
 
         List<JudicialExcelData> sendToDebtorButNotFiledInCourt =
-                judicialReportFilterImpl.generateSendToDebtorButNotFiledInCourtReport(judicialExcelData, days[0], days[1]);
+                judicialReportFilterImpl.generateSendToDebtorButNotFiledInCourtReport(judicialExcelData);
         List<JudicialExcelData> courtOrderNotReceived =
-                judicialReportFilterImpl.generateCourtOrderNotReceivedReport(judicialExcelData, days[0], days[1]);
+                judicialReportFilterImpl.generateCourtOrderNotReceivedReport(judicialExcelData);
         List<JudicialExcelData> copiesOfDocumentsSent =
                 judicialReportFilterImpl.generateCopiesOfDocumentsSent(judicialExcelData, days[0], days[1]);
         List<JudicialExcelData> applicationsSubmittedToCourt =
                 judicialReportFilterImpl.generateApplicationsSubmittedToCourt(judicialExcelData, days[0], days[1]);
         List<JudicialExcelData> cancellationOfTheCourtOrderButNoLawsuitFiled =
-                judicialReportFilterImpl.generateCancellationOfTheCourtOrderButNoLawsuitFiled(judicialExcelData, days[0], days[1]);
+                judicialReportFilterImpl.generateCancellationOfTheCourtOrderButNoLawsuitFiled(judicialExcelData);
         List<JudicialExcelData> returnOfDocumentsFromTheCourt =
                 judicialReportFilterImpl.generateReturnOfDocumentsFromTheCourt(judicialExcelData, days[0], days[1]);
         List<JudicialExcelData> receivedCourtOrder =
@@ -108,13 +108,13 @@ public class ExcelCheckServiceImpl implements ExcelCheckService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startDay = now.minusDays(7).withHour(0).withMinute(0).withSecond(0);
         LocalDateTime endDay = now.minusDays(1).withHour(23).withMinute(59).withSecond(59);
-        return new LocalDateTime[] {startDay, endDay};
+        return new LocalDateTime[]{startDay, endDay};
     }
 
     private LocalDateTime[] getStartAndDateForMonth() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startDay = now.minusDays(30).withHour(0).withMinute(0).withSecond(0);
         LocalDateTime endDay = now.minusDays(1).withHour(23).withMinute(59).withSecond(59);
-        return new LocalDateTime[] {startDay, endDay};
+        return new LocalDateTime[]{startDay, endDay};
     }
 }

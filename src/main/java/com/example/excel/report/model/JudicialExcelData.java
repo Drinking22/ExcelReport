@@ -24,8 +24,8 @@ public class JudicialExcelData {
     private final LocalDateTime dateOfFilingAnApplicationToTheCourt; //Дата подачи заявления в суд
     private final String judicialDistrict; //Судебный участок
     private final LocalDateTime dateOfDetermination; //Дата определения
-    private final LocalDateTime determinationOnTheReturnOfTheApplication; //Определение о возращении заявления
-    private final LocalDateTime determinationToCancelTheJointVenture; //Определение об отмене СП
+    private final String determinationOnTheReturnOfTheApplication; //Определение о возращении заявления
+    private final String determinationToCancelTheJointVenture; //Определение об отмене СП
     private final LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure; //Дата подачи заявления в исковом порядке
     private final String numberOfCourtOrder; //№ судебного приказа
     private final LocalDateTime dateOfCourtOrder; //Дата СП
