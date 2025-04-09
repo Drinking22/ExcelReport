@@ -1,10 +1,12 @@
 package com.example.excel.report.services.checks;
 
 import com.example.excel.report.constant.titles.ExcelJudicialSheetsNameConst;
+import com.example.excel.report.constant.titles.ExcelLawsuitSheetsNameConst;
 import com.example.excel.report.model.ExecutionProcessExcelData;
 import com.example.excel.report.model.JudicialExcelData;
 import com.example.excel.report.model.LawsuitExcelData;
-import com.example.excel.report.services.checks.filters.judicial.JudicialReportFilterImpl;
+import com.example.excel.report.services.checks.filters.judicial.JudicialReportFilter;
+import com.example.excel.report.services.checks.filters.lawsuit.LawsuitReportFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,8 @@ import java.util.Map;
 @Slf4j
 public class ExcelCheckServiceImpl implements ExcelCheckService {
 
-    private final JudicialReportFilterImpl judicialReportFilterImpl;
+    private final JudicialReportFilter judicialReportFilter;
+    private final LawsuitReportFilter lawsuitReportFilter;
 
     @Override
     public Map<String, List<JudicialExcelData>> generateJudicialMonthlyReport(List<JudicialExcelData> judicialExcelData) {
@@ -69,19 +72,19 @@ public class ExcelCheckServiceImpl implements ExcelCheckService {
         Map<String, List<JudicialExcelData>> judicialReport = new HashMap<>();
 
         List<JudicialExcelData> sendToDebtorButNotFiledInCourt =
-                judicialReportFilterImpl.generateSendToDebtorButNotFiledInCourtReport(judicialExcelData);
+                judicialReportFilter.generateSendToDebtorButNotFiledInCourtReport(judicialExcelData);
         List<JudicialExcelData> courtOrderNotReceived =
-                judicialReportFilterImpl.generateCourtOrderNotReceivedReport(judicialExcelData);
+                judicialReportFilter.generateCourtOrderNotReceivedReport(judicialExcelData);
         List<JudicialExcelData> copiesOfDocumentsSent =
-                judicialReportFilterImpl.generateCopiesOfDocumentsSent(judicialExcelData, days[0], days[1]);
+                judicialReportFilter.generateCopiesOfDocumentsSentReport(judicialExcelData, days[0], days[1]);
         List<JudicialExcelData> applicationsSubmittedToCourt =
-                judicialReportFilterImpl.generateApplicationsSubmittedToCourt(judicialExcelData, days[0], days[1]);
+                judicialReportFilter.generateApplicationsSubmittedToCourtReport(judicialExcelData, days[0], days[1]);
         List<JudicialExcelData> cancellationOfTheCourtOrderButNoLawsuitFiled =
-                judicialReportFilterImpl.generateCancellationOfTheCourtOrderButNoLawsuitFiled(judicialExcelData);
+                judicialReportFilter.generateCancellationOfTheCourtOrderButNoLawsuitFiledReport(judicialExcelData);
         List<JudicialExcelData> returnOfDocumentsFromTheCourt =
-                judicialReportFilterImpl.generateReturnOfDocumentsFromTheCourt(judicialExcelData, days[0], days[1]);
+                judicialReportFilter.generateReturnOfDocumentsFromTheCourtReport(judicialExcelData, days[0], days[1]);
         List<JudicialExcelData> receivedCourtOrder =
-                judicialReportFilterImpl.generateReceivedCourtOrder(judicialExcelData, days[0], days[1]);
+                judicialReportFilter.generateReceivedCourtOrderReport(judicialExcelData, days[0], days[1]);
 
         judicialReport.put(ExcelJudicialSheetsNameConst.SENT_TO_DEBTOR_BUT_NOT_FILED_IN_COURT.getSheetName(), sendToDebtorButNotFiledInCourt);
         judicialReport.put(ExcelJudicialSheetsNameConst.COURT_ORDER_NOT_RECEIVED.getSheetName(), courtOrderNotReceived);
@@ -96,7 +99,21 @@ public class ExcelCheckServiceImpl implements ExcelCheckService {
 
     private Map<String, List<LawsuitExcelData>> generateLawsuitReport(List<LawsuitExcelData> lawsuitExcelData, LocalDateTime[] days) {
         log.info("Generate all Lawsuit reports and puts in Map");
-        return null;
+
+        Map<String, List<LawsuitExcelData>> lawsuitReport = new HashMap<>();
+
+        List<LawsuitExcelData> claimsFiled =
+                lawsuitReportFilter.generateClaimFiledReport(lawsuitExcelData, days[0], days[1]);
+        List<LawsuitExcelData> dateOfReview =
+                lawsuitReportFilter.generateDateOfReviewReport(lawsuitExcelData, LocalDateTime.now());
+        List<LawsuitExcelData> receivedWritsOfExecution =
+                lawsuitReportFilter.generateReceivedWritsOfExecutionReport(lawsuitExcelData, days[0], days[1]);
+
+        lawsuitReport.put(ExcelLawsuitSheetsNameConst.CLAIMS_FILED.getSheetName(), claimsFiled);
+        lawsuitReport.put(ExcelLawsuitSheetsNameConst.DATE_OF_REVIEW.getSheetName(), dateOfReview);
+        lawsuitReport.put(ExcelLawsuitSheetsNameConst.RECEIVED_WRITS_OF_EXECUTION.getSheetName(), receivedWritsOfExecution);
+
+        return lawsuitReport;
     }
 
     private Map<String, List<ExecutionProcessExcelData>> generateExecutionProcessReport(List<ExecutionProcessExcelData> executionProcessExcelData, LocalDateTime[] days) {
