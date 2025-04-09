@@ -52,295 +52,295 @@ class JudicialDateCheckerTest {
 
     @Test
     @DisplayName("Court order not received after three months")
-    void testDateCheckerGenerateCourtOrderNotReceivedReport_Success() {
+    void testDateCheckerCourtOrderNotReceivedReport_Success() {
         LocalDateTime dateOfFiling = LocalDateTime.now().minusMonths(4);
         LocalDateTime dateOfDetermination = null;
         LocalDateTime dateOfReceiptOfCourtOrder = null;
 
-        assertTrue(JudicialDateChecker.dateCheckerGenerateCourtOrderNotReceivedReport(dateOfFiling, dateOfDetermination, dateOfReceiptOfCourtOrder));
+        assertTrue(JudicialDateChecker.dateCheckerCourtOrderNotReceivedReport(dateOfFiling, dateOfDetermination, dateOfReceiptOfCourtOrder));
     }
 
     @Test
     @DisplayName("Sent to court and received a determination")
-    void testDateCheckerGenerateCourtOrderNotReceivedReport_DeterminationReceived() {
+    void testDateCheckerCourtOrderNotReceivedReport_DeterminationReceived() {
         LocalDateTime dateOfFiling = LocalDateTime.now().minusMonths(3);
         LocalDateTime dateOfDetermination = LocalDateTime.now().minusMonths(2);
         LocalDateTime dateOfReceiptOfCourtOrder = null;
 
-        assertFalse(JudicialDateChecker.dateCheckerGenerateCourtOrderNotReceivedReport(dateOfFiling, dateOfDetermination, dateOfReceiptOfCourtOrder));
+        assertFalse(JudicialDateChecker.dateCheckerCourtOrderNotReceivedReport(dateOfFiling, dateOfDetermination, dateOfReceiptOfCourtOrder));
     }
 
     @Test
     @DisplayName("Court order was received")
-    void testDateCheckerGenerateCourtOrderNotReceivedReport_CourtOrderReceived() {
+    void testDateCheckerCourtOrderNotReceivedReport_CourtOrderReceived() {
         LocalDateTime dateOfFiling = LocalDateTime.now().minusMonths(3);
         LocalDateTime dateOfDetermination = null;
         LocalDateTime dateOfReceiptOfCourtOrder = LocalDateTime.now().minusMonths(2);
 
-        assertFalse(JudicialDateChecker.dateCheckerGenerateCourtOrderNotReceivedReport(dateOfFiling, dateOfDetermination, dateOfReceiptOfCourtOrder));
+        assertFalse(JudicialDateChecker.dateCheckerCourtOrderNotReceivedReport(dateOfFiling, dateOfDetermination, dateOfReceiptOfCourtOrder));
     }
 
     @Test
     @DisplayName("Less than three months have passed")
-    void testDateCheckerGenerateCourtOrderNotReceivedReport_LessThanThreeMonths() {
+    void testDateCheckerCourtOrderNotReceivedReport_LessThanThreeMonths() {
         LocalDateTime dateOfFiling = LocalDateTime.now().minusMonths(2);
         LocalDateTime dateOfDetermination = null;
         LocalDateTime dateOfReceiptOfCourtOrder = null;
 
-        assertFalse(JudicialDateChecker.dateCheckerGenerateCourtOrderNotReceivedReport(dateOfFiling, dateOfDetermination, dateOfReceiptOfCourtOrder));
+        assertFalse(JudicialDateChecker.dateCheckerCourtOrderNotReceivedReport(dateOfFiling, dateOfDetermination, dateOfReceiptOfCourtOrder));
     }
 
     @Test
     @DisplayName("Date to check is equal to start date for copies of documents for weekly period")
-    void testDateCheckerCopiesOfDocumentsSent_EqualToStartWeekly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_EqualToStartWeekly() {
         LocalDateTime dateCheck = startWeekly;
-        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is equal to start date for copies of documents for monthly period")
-    void testDateCheckerCopiesOfDocumentsSent_EqualToStartMonthly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_EqualToStartMonthly() {
         LocalDateTime dateCheck = startMonthly;
-        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Date to check is equal to end date for copies of documents for weekly period")
-    void testDateCheckerCopiesOfDocumentsSent_EqualToEndWeekly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_EqualToEndWeekly() {
         LocalDateTime dateCheck = endWeekly;
-        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is equal to end date for copies of documents for monthly period")
-    void testDateCheckerCopiesOfDocumentsSent_EqualToEndMonthly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_EqualToEndMonthly() {
         LocalDateTime dateCheck = endMonthly;
-        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Date to check is in range for copies of documents for weekly period")
-    void testDateCheckerCopiesOfDocumentsSent_InRangeWeekly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_InRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(3);
-        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is in range for copies of documents for monthly period")
-    void testDateCheckerCopiesOfDocumentsSent_InRangeMonthly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_InRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(15);
-        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Documents were sent before the period under consideration for copies of documents for weekly period")
-    void testDateCheckerCopiesOfDocumentsSent_BeforeRangeWeekly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_BeforeRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(9);
-        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Documents were sent before the period under consideration for copies of documents for monthly period")
-    void testDateCheckerCopiesOfDocumentsSent_BeforeRangeMonthly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_BeforeRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(40);
-        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Documents sent after the period under consideration for weekly period")
-    void testDateCheckerCopiesOfDocumentsSent_AfterRangeWeekly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_AfterRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().plusDays(7);
-        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Documents sent after the period under consideration for monthly period")
-    void testDateCheckerCopiesOfDocumentsSent_AfterRangeMonthly() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_AfterRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().plusDays(7);
 
-        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Documents not sent for monthly and weekly period")
-    void testDateCheckerCopiesOfDocumentsSent_IsNull() {
+    void testDateCheckerCopiesOfDocumentsSent_Report_IsNull() {
         LocalDateTime dateCheck = null;
 
-        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startMonthly, endMonthly));
-        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is equal to start date for applications submitted to court for weekly period")
-    void testDateCheckerApplicationsSubmittedToCourt_EqualToStartWeekly() {
+    void testDateCheckerApplicationsSubmittedToCourt_EqualToStartWeeklyReport() {
         LocalDateTime dateCheck = startWeekly;
-        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is equal to start date for applications submitted to court for monthly period")
-    void testDateCheckerApplicationsSubmittedToCourt_EqualToStartMonthly() {
+    void testDateCheckerApplicationsSubmittedToCourt_EqualToStartMonthlyReport() {
         LocalDateTime dateCheck = startMonthly;
-        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Date to check is equal to end date for applications submitted for weekly period")
-    void testDateCheckerApplicationsSubmittedToCourt_EqualToEndWeekly() {
+    void testDateCheckerApplicationsSubmittedToCourt_EqualToEndWeeklyReport() {
         LocalDateTime dateCheck = endWeekly;
-        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is equal to end date for applications submitted for monthly period")
-    void testDateCheckerApplicationsSubmittedToCourt_EqualToEndMonthly() {
+    void testDateCheckerApplicationsSubmittedToCourt_EqualToEndMonthlyReport() {
         LocalDateTime dateCheck = endMonthly;
-        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Date to check is in range for applications submitted for weekly period")
-    void testDateCheckerApplicationsSubmittedToCourt_InRangeWeekly() {
+    void testDateCheckerApplicationsSubmittedToCourt_Report_InRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(3);
-        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is in range for applications submitted for monthly period")
-    void testDateCheckerApplicationsSubmittedToCourt_InRangeMonthly() {
+    void testDateCheckerApplicationsSubmittedToCourt_Report_InRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(15);
-        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Date to check is before range for applications submitted for weekly period")
-    void testDateCheckerApplicationsSubmittedToCourt_BeforeRangeWeekly() {
+    void testDateCheckerApplicationsSubmittedToCourt_Report_BeforeRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(9);
-        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is before range for applications submitted for monthly period")
-    void testDateCheckerApplicationsSubmittedToCourt_BeforeRangeMonthly() {
+    void testDateCheckerApplicationsSubmittedToCourt_Report_BeforeRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(40);
-        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Date to check is after range for applications submitted for weekly period")
-    void testDateCheckerApplicationsSubmittedToCourt_AfterRangeWeekly() {
+    void testDateCheckerApplicationsSubmittedToCourt_Report_AfterRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().plusDays(7);
-        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is after range for applications submitted for monthly period")
-    void testDateCheckerApplicationsSubmittedToCourt_AfterRangeMonthly() {
+    void testDateCheckerApplicationsSubmittedToCourt_Report_AfterRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().plusDays(40);
-        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Documents not sent for applications submitted to court for monthly and weekly period")
-    void testDateCheckerApplicationsSubmittedToCourt_IsNull() {
+    void testDateCheckerApplicationsSubmittedToCourt_Report_IsNull() {
         LocalDateTime dateCheck = null;
-        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startMonthly, endMonthly));
-        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Cancellation of the court order but no lawsuit filed")
-    void testDateCheckerCancellationOfTheCourtOrderButNoLawsuitFiled_Success() {
+    void testDateCheckerCancellationOfTheCourtOrderButNoLawsuitFiled_Report_Success() {
         String determination = "Test determination info";
         LocalDateTime dateOfFiling = null;
-        assertTrue(JudicialDateChecker.dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiled(determination, dateOfFiling));
+        assertTrue(JudicialDateChecker.dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiledReport(determination, dateOfFiling));
     }
 
     @Test
     @DisplayName("There is no information about the cancellation of the court order")
-    void testDateCheckerCancellationOfTheCourtOrderButNoLawsuitFiled_NoCancellationInfo() {
+    void testDateCheckerCancellationOfTheCourtOrderButNoLawsuitFiled_NoCancellationInfoReport() {
         String determination = null;
         LocalDateTime dateOfFiling = LocalDateTime.now();
-        assertFalse(JudicialDateChecker.dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiled(determination, dateOfFiling));
+        assertFalse(JudicialDateChecker.dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiledReport(determination, dateOfFiling));
     }
 
     @Test
     @DisplayName("Date to check is equal to start date for received court order for weekly period")
-    void testDateCheckerReceivedCourtOrder_EqualToStartWeekly() {
+    void testDateCheckerReceivedCourtOrder_Report_EqualToStartWeekly() {
         LocalDateTime dateCheck = startWeekly;
-        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is equal to start date for received court order for monthly period")
-    void testDateCheckerReceivedCourtOrder_EqualToStartMonthly() {
+    void testDateCheckerReceivedCourtOrder_Report_EqualToStartMonthly() {
         LocalDateTime dateCheck = startMonthly;
-        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Date to check is equal to end date for received court order for weekly period")
-    void testDateCheckerReceivedCourtOrder_EqualToEndWeekly() {
+    void testDateCheckerReceivedCourtOrder_Report_EqualToEndWeekly() {
         LocalDateTime dateCheck = endWeekly;
-        assertTrue(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is equal to end date for received court order for monthly period")
-    void testDateCheckerReceivedCourtOrder_EqualToEndMonthly() {
+    void testDateCheckerReceivedCourtOrder_Report_EqualToEndMonthly() {
         LocalDateTime dateCheck = endMonthly;
-        assertTrue(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Date to check is in range for received court order for weekly period")
-    void testDateCheckerReceivedCourtOrder_InRangeWeekly() {
+    void testDateCheckerReceivedCourtOrder_Report_InRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(3);
-        assertTrue(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startWeekly, endWeekly));
+        assertTrue(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("Date to check is in range for received court order for monthly period")
-    void testDateCheckerReceivedCourtOrder_InRangeMonthly() {
+    void testDateCheckerReceivedCourtOrder_Report_InRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(15);
-        assertTrue(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startMonthly, endMonthly));
+        assertTrue(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("The court order was received before the period under consideration for received court order for weekly period")
-    void testDateCheckerReceivedCourtOrder_BeforeRangeWeekly() {
+    void testDateCheckerReceivedCourtOrder_Report_BeforeRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(9);
-        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("The court order was received before the period under consideration for received court order for monthly period")
-    void testDateCheckerReceivedCourtOrder_BeforeRangeMonthly() {
+    void testDateCheckerReceivedCourtOrder_Report_BeforeRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().minusDays(40);
-        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("The court order was received after the period under consideration for weekly period")
-    void testDateCheckerReceivedCourtOrder_AfterRangeWeekly() {
+    void testDateCheckerReceivedCourtOrder_Report_AfterRangeWeekly() {
         LocalDateTime dateCheck = LocalDateTime.now().plusDays(7);
-        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startWeekly, endWeekly));
     }
 
     @Test
     @DisplayName("The court order was received after the period under consideration for monthly period")
-    void testDateCheckerReceivedCourtOrder_AfterRangeMonthly() {
+    void testDateCheckerReceivedCourtOrder_Report_AfterRangeMonthly() {
         LocalDateTime dateCheck = LocalDateTime.now().plusDays(7);
 
-        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startMonthly, endMonthly));
     }
 
     @Test
     @DisplayName("Court order not received for monthly and weekly period")
-    void testDateCheckerReceivedCourtOrder_IsNull() {
+    void testDateCheckerReceivedCourtOrder_Report_IsNull() {
         LocalDateTime dateCheck = null;
 
-        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startMonthly, endMonthly));
-        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrder(dateCheck, startWeekly, endWeekly));
+        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startMonthly, endMonthly));
+        assertFalse(JudicialDateChecker.dateCheckerReceivedCourtOrderReport(dateCheck, startWeekly, endWeekly));
     }
 }

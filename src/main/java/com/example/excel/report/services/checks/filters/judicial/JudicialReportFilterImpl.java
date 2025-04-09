@@ -41,7 +41,7 @@ public class JudicialReportFilterImpl implements JudicialReportFilter{
     public List<JudicialExcelData> generateCourtOrderNotReceivedReport(List<JudicialExcelData> judicialExcelData) {
         log.info("Generating a report no court order received for more than 3 months");
         return judicialExcelData.stream()
-                .filter(data -> JudicialDateChecker.dateCheckerGenerateCourtOrderNotReceivedReport(
+                .filter(data -> JudicialDateChecker.dateCheckerCourtOrderNotReceivedReport(
                         data.getDateOfFilingAnApplicationToTheCourt(), data.getDateOfDetermination(),
                         data.getDateOfReceiptOfCourtOrder()
                 ))
@@ -57,10 +57,10 @@ public class JudicialReportFilterImpl implements JudicialReportFilter{
      * @return список {@link JudicialExcelData}, где документы были отправлены должнику в указанный диапазон дат.
      */
     @Override
-    public List<JudicialExcelData> generateCopiesOfDocumentsSent(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end) {
+    public List<JudicialExcelData> generateCopiesOfDocumentsSentReport(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end) {
         log.info("Generating a report on the number of applications sent to the debtor");
         return judicialExcelData.stream()
-                .filter(data -> JudicialDateChecker.dateCheckerCopiesOfDocumentsSent(
+                .filter(data -> JudicialDateChecker.dateCheckerCopiesOfDocumentsSentReport(
                         data.getDateOfSendingCopiesOfDocuments(), start, end))
                 .toList();
     }
@@ -74,10 +74,10 @@ public class JudicialReportFilterImpl implements JudicialReportFilter{
      * @return список {@link JudicialExcelData}, где заявления были поданы в суд в указанный диапазон дат.
      */
     @Override
-    public List<JudicialExcelData> generateApplicationsSubmittedToCourt(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end) {
+    public List<JudicialExcelData> generateApplicationsSubmittedToCourtReport(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end) {
         log.info("Generating a report applications submitted to court");
         return judicialExcelData.stream()
-                .filter(data -> JudicialDateChecker.dateCheckerApplicationsSubmittedToCourt(
+                .filter(data -> JudicialDateChecker.dateCheckerApplicationsSubmittedToCourtReport(
                         data.getDateOfFilingAnApplicationToTheCourt(), start, end))
                 .toList();
     }
@@ -89,10 +89,10 @@ public class JudicialReportFilterImpl implements JudicialReportFilter{
      * @return список {@link JudicialExcelData}, где судебный приказ был отменен, но иск не был подан.
      */
     @Override
-    public List<JudicialExcelData> generateCancellationOfTheCourtOrderButNoLawsuitFiled(List<JudicialExcelData> judicialExcelData) {
+    public List<JudicialExcelData> generateCancellationOfTheCourtOrderButNoLawsuitFiledReport(List<JudicialExcelData> judicialExcelData) {
         log.info("Generating a report cancellation of the court order but no lawsuit filed");
         return judicialExcelData.stream()
-                .filter(data -> JudicialDateChecker.dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiled(
+                .filter(data -> JudicialDateChecker.dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiledReport(
                         data.getDeterminationToCancelTheJointVenture(), data.getDateOfFilingAnApplicationInTheClaimProcedure()))
                 .toList();
     }
@@ -106,10 +106,10 @@ public class JudicialReportFilterImpl implements JudicialReportFilter{
      * @return список {@link JudicialExcelData}, где документы были возвращены из суда в указанный диапазон дат.
      */
     @Override
-    public List<JudicialExcelData> generateReturnOfDocumentsFromTheCourt(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end) {
+    public List<JudicialExcelData> generateReturnOfDocumentsFromTheCourtReport(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end) {
         log.info("Generating a report return of documents from the court");
         return judicialExcelData.stream()
-                .filter(data -> JudicialDateChecker.dateCheckerReturnOfDocumentsFromTheCourt(
+                .filter(data -> JudicialDateChecker.dateCheckerReturnOfDocumentsFromTheCourtReport(
                         data.getDateOfDetermination(), data.getDeterminationOnTheReturnOfTheApplication(), start, end))
                 .toList();
     }
@@ -123,10 +123,10 @@ public class JudicialReportFilterImpl implements JudicialReportFilter{
      * @return список {@link JudicialExcelData}, где судебные приказы были получены в указанный диапазон дат.
      */
     @Override
-    public List<JudicialExcelData> generateReceivedCourtOrder(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end) {
+    public List<JudicialExcelData> generateReceivedCourtOrderReport(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end) {
         log.info("Generating a report received court order");
         return judicialExcelData.stream()
-                .filter(data -> JudicialDateChecker.dateCheckerReceivedCourtOrder(
+                .filter(data -> JudicialDateChecker.dateCheckerReceivedCourtOrderReport(
                         data.getDateOfReceiptOfCourtOrder(), start, end))
                 .toList();
     }

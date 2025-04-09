@@ -1,5 +1,7 @@
 package com.example.excel.report.services.checks.filters.judicial;
 
+import com.example.excel.report.services.checks.filters.judicial.abstracts.DateChecker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -10,8 +12,14 @@ import java.time.temporal.ChronoUnit;
  * Содержит статические методы для проверки различных условий, касающихся дат отправки документов,
  * подачи заявлений в суд и получения судебных приказов.
  */
+@Slf4j
 @Component
-public class JudicialDateChecker {
+public class JudicialDateChecker extends DateChecker {
+
+    @Override
+    public boolean checkDate(LocalDateTime date, LocalDateTime start, LocalDateTime end) {
+        return isDateInRange(date, start, end);
+    }
 
     /**
      * Проверяет, были ли копии документов отправлены должнику, но не поданы в суд.
@@ -22,6 +30,7 @@ public class JudicialDateChecker {
      */
     public static boolean dateCheckerSendToDebtorButNotFiledInCourtReport(LocalDateTime dateOfSendingCopiesOfDocuments,
                                                                           LocalDateTime dateOfFilingAnApplicationToTheCourt) {
+        log.info("Checking send to debtor but not filed in court. Date sending: {}, date of filing: {}", dateOfSendingCopiesOfDocuments, dateOfFilingAnApplicationToTheCourt);
         return dateOfSendingCopiesOfDocuments != null &&
                 dateOfFilingAnApplicationToTheCourt == null &&
                 ChronoUnit.DAYS.between(dateOfSendingCopiesOfDocuments, LocalDateTime.now()) >= 7;
@@ -35,8 +44,11 @@ public class JudicialDateChecker {
      * @param dateOfReceiptOfCourtOrder дата получения судебного приказа.
      * @return true, если заявление подано, но судебный приказ не получен более 3 месяцев.
      */
-    public static boolean dateCheckerGenerateCourtOrderNotReceivedReport(LocalDateTime dateOfFilingAnApplicationToTheCourt,
-                                                                         LocalDateTime dateOfDetermination, LocalDateTime dateOfReceiptOfCourtOrder) {
+    public static boolean dateCheckerCourtOrderNotReceivedReport(LocalDateTime dateOfFilingAnApplicationToTheCourt,
+                                                                 LocalDateTime dateOfDetermination, LocalDateTime dateOfReceiptOfCourtOrder) {
+        log.info("Checking if court order not received. Date of filing: {}, Date of determination: {}, Date of receipt: {}",
+                dateOfFilingAnApplicationToTheCourt, dateOfDetermination, dateOfReceiptOfCourtOrder);
+
         return dateOfFilingAnApplicationToTheCourt != null &&
                 dateOfDetermination == null && dateOfReceiptOfCourtOrder == null
                 && ChronoUnit.MONTHS.between(dateOfFilingAnApplicationToTheCourt, LocalDateTime.now()) > 3;
@@ -50,11 +62,9 @@ public class JudicialDateChecker {
      * @param end конечная дата диапазона.
      * @return true, если документы были отправлены в указанный диапазон дат.
      */
-    public static boolean dateCheckerCopiesOfDocumentsSent(LocalDateTime dateOfSendingCopiesOfDocuments, LocalDateTime start, LocalDateTime end) {
-        return dateOfSendingCopiesOfDocuments != null &&
-                (dateOfSendingCopiesOfDocuments.isEqual(start) ||
-                        dateOfSendingCopiesOfDocuments.isEqual(end) ||
-                        (dateOfSendingCopiesOfDocuments.isAfter(start) && dateOfSendingCopiesOfDocuments.isBefore(end)));
+    public static boolean dateCheckerCopiesOfDocumentsSentReport(LocalDateTime dateOfSendingCopiesOfDocuments, LocalDateTime start, LocalDateTime end) {
+        log.info("Checking if copies of documents were sent. Date of sending: {}, Range: [{} - {}]", dateOfSendingCopiesOfDocuments, start, end);
+        return isDateInRange(dateOfSendingCopiesOfDocuments, start, end);
     }
 
     /**
@@ -65,11 +75,9 @@ public class JudicialDateChecker {
      * @param end конечная дата диапазона.
      * @return true, если заявление подано в указанный диапазон дат.
      */
-    public static boolean dateCheckerApplicationsSubmittedToCourt(LocalDateTime dateOfFilingAnApplicationToTheCourt, LocalDateTime start, LocalDateTime end) {
-        return dateOfFilingAnApplicationToTheCourt != null &&
-                (dateOfFilingAnApplicationToTheCourt.isEqual(start) ||
-                        dateOfFilingAnApplicationToTheCourt.isEqual(end) ||
-                        (dateOfFilingAnApplicationToTheCourt.isAfter(start) && dateOfFilingAnApplicationToTheCourt.isBefore(end)));
+    public static boolean dateCheckerApplicationsSubmittedToCourtReport(LocalDateTime dateOfFilingAnApplicationToTheCourt, LocalDateTime start, LocalDateTime end) {
+        log.info("Checking if applications were submitted to court. Date of filing: {}, Range: [{} - {}]", dateOfFilingAnApplicationToTheCourt, start, end);
+        return isDateInRange(dateOfFilingAnApplicationToTheCourt, start, end);
     }
 
     /**
@@ -79,7 +87,10 @@ public class JudicialDateChecker {
      * @param dateOfFilingAnApplicationInTheClaimProcedure дата подачи заявления в судебном процессе.
      * @return true, если решение об отмене существует, но иск не подан.
      */
-    public static boolean dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiled(String determinationToCancelTheJointVenture, LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure) {
+    public static boolean dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiledReport(String determinationToCancelTheJointVenture, LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure) {
+        log.info("Checking cancellation of court order with no lawsuit filed. Determination: '{}', Date of filing: {}",
+                determinationToCancelTheJointVenture, dateOfFilingAnApplicationInTheClaimProcedure);
+
         return determinationToCancelTheJointVenture != null && dateOfFilingAnApplicationInTheClaimProcedure == null;
     }
 
@@ -92,7 +103,10 @@ public class JudicialDateChecker {
      * @param end конечная дата диапазона.
      * @return true, если документы были возвращены в указанный диапазон дат.
      */
-    public static boolean dateCheckerReturnOfDocumentsFromTheCourt(LocalDateTime dateOfDetermination, String determinationOnTheReturnOfTheApplication, LocalDateTime start, LocalDateTime end) {
+    public static boolean dateCheckerReturnOfDocumentsFromTheCourtReport(LocalDateTime dateOfDetermination, String determinationOnTheReturnOfTheApplication, LocalDateTime start, LocalDateTime end) {
+        log.info("Checking return of documents from court. Date of determination: {}, Determination: '{}', Range: [{} - {}]",
+                dateOfDetermination, determinationOnTheReturnOfTheApplication, start, end);
+
         return dateOfDetermination != null && determinationOnTheReturnOfTheApplication != null &&
         (dateOfDetermination.isEqual(start) ||
                 dateOfDetermination.isEqual(end) ||
@@ -107,10 +121,9 @@ public class JudicialDateChecker {
      * @param end конечная дата диапазона.
      * @return true, если судебный приказ был получен в указанный диапазон дат.
      */
-    public static boolean dateCheckerReceivedCourtOrder(LocalDateTime dateOfReceiptOfCourtOrder, LocalDateTime start, LocalDateTime end) {
-        return dateOfReceiptOfCourtOrder != null &&
-                (dateOfReceiptOfCourtOrder.isEqual(start) ||
-                        dateOfReceiptOfCourtOrder.isEqual(end) ||
-                        (dateOfReceiptOfCourtOrder.isAfter(start) && dateOfReceiptOfCourtOrder.isBefore(end)));
+    public static boolean dateCheckerReceivedCourtOrderReport(LocalDateTime dateOfReceiptOfCourtOrder, LocalDateTime start, LocalDateTime end) {
+        log.info("Checking receipt of court order. Date of receipt: {}, Range: [{} - {}]",
+                dateOfReceiptOfCourtOrder, start, end);
+        return isDateInRange(dateOfReceiptOfCourtOrder, start, end);
     }
 }

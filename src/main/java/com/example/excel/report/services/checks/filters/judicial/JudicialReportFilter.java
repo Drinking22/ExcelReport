@@ -8,10 +8,10 @@ import java.util.List;
 public interface JudicialReportFilter {
     List<JudicialExcelData> generateSendToDebtorButNotFiledInCourtReport(List<JudicialExcelData> judicialExcelData);
     List<JudicialExcelData> generateCourtOrderNotReceivedReport(List<JudicialExcelData> judicialExcelData);
-    List<JudicialExcelData> generateCopiesOfDocumentsSent(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end);
-    List<JudicialExcelData> generateApplicationsSubmittedToCourt(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end);
-    List<JudicialExcelData> generateCancellationOfTheCourtOrderButNoLawsuitFiled(List<JudicialExcelData> judicialExcelData);
-    List<JudicialExcelData> generateReturnOfDocumentsFromTheCourt(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end);
-    List<JudicialExcelData> generateReceivedCourtOrder(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end);
+    List<JudicialExcelData> generateCopiesOfDocumentsSentReport(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end);
+    List<JudicialExcelData> generateApplicationsSubmittedToCourtReport(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end);
+    List<JudicialExcelData> generateCancellationOfTheCourtOrderButNoLawsuitFiledReport(List<JudicialExcelData> judicialExcelData);
+    List<JudicialExcelData> generateReturnOfDocumentsFromTheCourtReport(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end);
+    List<JudicialExcelData> generateReceivedCourtOrderReport(List<JudicialExcelData> judicialExcelData, LocalDateTime start, LocalDateTime end);
 }
 
