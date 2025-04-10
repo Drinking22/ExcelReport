@@ -1,6 +1,6 @@
 package com.example.excel.report.services.checks.filters.lawsuit;
 
-import com.example.excel.report.services.checks.filters.judicial.abstracts.DateChecker;
+import com.example.excel.report.services.checks.filters.abstracts.DateChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

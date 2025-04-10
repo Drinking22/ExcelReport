@@ -6,7 +6,6 @@ import com.example.excel.report.model.LawsuitExcelData;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public interface ExcelCheckService {
     Map<String, List<JudicialExcelData>> generateJudicialMonthlyReport(List<JudicialExcelData> judicialExcelData);

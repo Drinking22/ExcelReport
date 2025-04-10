@@ -1,6 +1,6 @@
 package com.example.excel.report.services.checks.filters.judicial;
 
-import com.example.excel.report.services.checks.filters.judicial.abstracts.DateChecker;
+import com.example.excel.report.services.checks.filters.abstracts.DateChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -84,7 +84,7 @@ public class JudicialDateChecker extends DateChecker {
      * Проверяет, был ли судебный приказ отменен без подачи иска.
      *
      * @param determinationToCancelTheJointVenture информация о решении об отмене.
-     * @param dateOfFilingAnApplicationInTheClaimProcedure дата подачи заявления в судебном процессе.
+     * @param dateOfFilingAnApplicationInTheClaimProcedure дата подачи заявления в исковом порядке.
      * @return true, если решение об отмене существует, но иск не подан.
      */
     public static boolean dateCheckerCancellationOfTheCourtOrderButNoLawsuitFiledReport(String determinationToCancelTheJointVenture, LocalDateTime dateOfFilingAnApplicationInTheClaimProcedure) {
@@ -107,10 +107,7 @@ public class JudicialDateChecker extends DateChecker {
         log.info("Checking return of documents from court. Date of determination: {}, Determination: '{}', Range: [{} - {}]",
                 dateOfDetermination, determinationOnTheReturnOfTheApplication, start, end);
 
-        return dateOfDetermination != null && determinationOnTheReturnOfTheApplication != null &&
-        (dateOfDetermination.isEqual(start) ||
-                dateOfDetermination.isEqual(end) ||
-                (dateOfDetermination.isAfter(start) && dateOfDetermination.isBefore(end)));
+        return determinationOnTheReturnOfTheApplication != null && isDateInRange(dateOfDetermination, start, end);
     }
 
     /**

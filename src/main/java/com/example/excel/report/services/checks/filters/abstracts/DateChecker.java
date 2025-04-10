@@ -1,4 +1,4 @@
-package com.example.excel.report.services.checks.filters.judicial.abstracts;
+package com.example.excel.report.services.checks.filters.abstracts;
 
 import java.time.LocalDateTime;
 
