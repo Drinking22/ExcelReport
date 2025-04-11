@@ -1,10 +1,12 @@
 package com.example.excel.report.services.checks;
 
+import com.example.excel.report.constant.titles.ExcelExecutionProcessSheetsNameConst;
 import com.example.excel.report.constant.titles.ExcelJudicialSheetsNameConst;
 import com.example.excel.report.constant.titles.ExcelLawsuitSheetsNameConst;
 import com.example.excel.report.model.ExecutionProcessExcelData;
 import com.example.excel.report.model.JudicialExcelData;
 import com.example.excel.report.model.LawsuitExcelData;
+import com.example.excel.report.services.checks.filters.execution.ExecutionProcessReportFilter;
 import com.example.excel.report.services.checks.filters.judicial.JudicialReportFilter;
 import com.example.excel.report.services.checks.filters.lawsuit.LawsuitReportFilter;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class ExcelCheckServiceImpl implements ExcelCheckService {
 
     private final JudicialReportFilter judicialReportFilter;
     private final LawsuitReportFilter lawsuitReportFilter;
+    private final ExecutionProcessReportFilter executionProcessReportFilter;
 
     @Override
     public Map<String, List<JudicialExcelData>> generateJudicialMonthlyReport(List<JudicialExcelData> judicialExcelData) {
@@ -118,7 +121,32 @@ public class ExcelCheckServiceImpl implements ExcelCheckService {
 
     private Map<String, List<ExecutionProcessExcelData>> generateExecutionProcessReport(List<ExecutionProcessExcelData> executionProcessExcelData, LocalDateTime[] days) {
         log.info("Generate all Execution Process reports and puts in Map");
-        return null;
+
+        Map<String, List<ExecutionProcessExcelData>> executionProcessReport = new HashMap<>();
+
+        List<ExecutionProcessExcelData> submittedForExecution = executionProcessReportFilter.generateSubmittedForExecutionReport(executionProcessExcelData, days[0], days[1]);
+        List<ExecutionProcessExcelData> documentReceivedButNotSubmittedForExecution = executionProcessReportFilter.generateDocumentReceivedButNotSubmittedForExecutionReport(executionProcessExcelData);
+        List<ExecutionProcessExcelData> documentFiledButNotInitiation = executionProcessReportFilter.generateDocumentFiledButNotInitiationReport(executionProcessExcelData);
+        List<ExecutionProcessExcelData> numberOfProgress = executionProcessReportFilter.generateNumberOfProgressReport(executionProcessExcelData, days[0], days[1]);
+        List<ExecutionProcessExcelData> numberOfComplaintsFiled = executionProcessReportFilter.generateNumberOfComplaintsFiledReport(executionProcessExcelData, days[0], days[1]);
+        List<ExecutionProcessExcelData> numberOfComplaintsFiledInCourt = executionProcessReportFilter.generateNumberOfComplaintsFiledInCourtReport(executionProcessExcelData, days[0], days[1]);
+        List<ExecutionProcessExcelData> controlOfTheWorkplace = executionProcessReportFilter.generateControlOfTheWorkplaceReport(executionProcessExcelData);
+        List<ExecutionProcessExcelData> vehicleControl = executionProcessReportFilter.generateVehicleControlReport(executionProcessExcelData);
+        List<ExecutionProcessExcelData> propertyControl = executionProcessReportFilter.generatePropertyControlReport(executionProcessExcelData);
+        List<ExecutionProcessExcelData> numberOfOutputs = executionProcessReportFilter.generateNumberOfOutputsReport(executionProcessExcelData, days[0], days[1]);
+
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.SUBMITTED_FOR_EXECUTION.getSheetName(), submittedForExecution);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.DOCUMENT_RECEIVED_BUT_NOT_SUBMITTED_FOR_EXECUTION.getSheetName(), documentReceivedButNotSubmittedForExecution);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.DOCUMENT_FILED_BUT_NO_INITIATION.getSheetName(), documentFiledButNotInitiation);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.NUMBER_OF_PROGRESS_REPORTS.getSheetName(), numberOfProgress);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.NUMBER_OF_COMPLAINTS_FILED.getSheetName(), numberOfComplaintsFiled);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.NUMBER_OF_COMPLAINTS_FILED_IN_COURT.getSheetName(), numberOfComplaintsFiledInCourt);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.CONTROL_OF_THE_WORKPLACE.getSheetName(), controlOfTheWorkplace);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.VEHICLE_CONTROL.getSheetName(), vehicleControl);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.PROPERTY_CONTROL.getSheetName(), propertyControl);
+        executionProcessReport.put(ExcelExecutionProcessSheetsNameConst.NUMBER_OF_OUTPUTS.getSheetName(), numberOfOutputs);
+
+        return executionProcessReport;
     }
 
     private LocalDateTime[] getStartAndEndDateForWeek() {
