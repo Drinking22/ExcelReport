@@ -1,6 +1,5 @@
 package com.example.excel.report.services;
 
-import com.example.excel.report.constant.titles.ExcelFileNameConst;
 import com.example.excel.report.exceptions.ReportGenerationException;
 import com.example.excel.report.model.ExecutionProcessExcelData;
 import com.example.excel.report.model.JudicialExcelData;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +28,7 @@ public class MainReportServiceImpl implements MainReportService {
     private final ExcelWriterService excelWriterService;
 
     @Override
-    public FileOutputStream generateMonthlyJudicialReportFile(ExcelFileNameConst fileName, FileInputStream excelFile) {
+    public String generateMonthlyJudicialReportFile(String fileName, FileInputStream excelFile) {
         log.info("Starting process with judicial monthly report");
 
         try {
@@ -48,7 +46,7 @@ public class MainReportServiceImpl implements MainReportService {
     }
 
     @Override
-    public FileOutputStream generateWeeklyJudicialReportFile(ExcelFileNameConst fileName, FileInputStream excelFile) {
+    public String generateWeeklyJudicialReportFile(String fileName, FileInputStream excelFile) {
         log.info("Starting process with judicial weekly report");
 
         try {
@@ -65,7 +63,7 @@ public class MainReportServiceImpl implements MainReportService {
     }
 
     @Override
-    public FileOutputStream generateMonthlyLawsuitReportFile(ExcelFileNameConst fileName, FileInputStream excelFile) {
+    public String generateMonthlyLawsuitReportFile(String fileName, FileInputStream excelFile) {
         log.info("Starting process with lawsuit monthly report");
 
         try {
@@ -82,7 +80,7 @@ public class MainReportServiceImpl implements MainReportService {
     }
 
     @Override
-    public FileOutputStream generateWeeklyLawsuitReportFile(ExcelFileNameConst fileName, FileInputStream excelFile) {
+    public String generateWeeklyLawsuitReportFile(String fileName, FileInputStream excelFile) {
         log.info("Starting process with lawsuit weekly report");
 
         try {
@@ -99,7 +97,7 @@ public class MainReportServiceImpl implements MainReportService {
     }
 
     @Override
-    public FileOutputStream generateMonthlyExecutionProcessReportFile(ExcelFileNameConst fileName, FileInputStream excelFile) {
+    public String generateMonthlyExecutionProcessReportFile(String fileName, FileInputStream excelFile) {
         log.info("Starting process with execution process monthly report");
 
         try {
@@ -115,7 +113,7 @@ public class MainReportServiceImpl implements MainReportService {
     }
 
     @Override
-    public FileOutputStream generateWeeklyExecutionProcessReportFile(ExcelFileNameConst fileName, FileInputStream excelFile) {
+    public String generateWeeklyExecutionProcessReportFile(String fileName, FileInputStream excelFile) {
         log.info("Starting process with execution process weekly report");
 
         try {
@@ -143,18 +141,18 @@ public class MainReportServiceImpl implements MainReportService {
         return excelParserService.parseExecutionProcessExcelFileWithoutRepaymentOfDebt(excelFile);
     }
 
-    private FileOutputStream writeJudicialReportInExcelFile(ExcelFileNameConst fileName,
-                                                            Map<String, List<JudicialExcelData>> allReports) {
-        return excelWriterService.writeJudicialReportExcelFile(fileName, allReports);
+    private String writeJudicialReportInExcelFile(String fileName,
+                                                            Map<String, List<JudicialExcelData>> allReports) throws IOException {
+        return excelWriterService.writeJudicialReportExcelFile(fileName, allReports, );
     }
 
-    private FileOutputStream writeLawsuitReportInExcelFile(ExcelFileNameConst fileName,
+    private String writeLawsuitReportInExcelFile(String fileName,
                                                            Map<String, List<LawsuitExcelData>> allReports) {
-        return excelWriterService.writeLawsuitReportExcelFile(fileName, allReports);
+        return excelWriterService.writeLawsuitReportExcelFile(fileName, allReports, );
     }
 
-    private FileOutputStream writeExecutionProcessReportInExcelFile(ExcelFileNameConst fileName,
+    private String writeExecutionProcessReportInExcelFile(String fileName,
                                                                     Map<String, List<ExecutionProcessExcelData>> allReports) {
-        return excelWriterService.writeExecutionProcessReportExcelFile(fileName, allReports);
+        return excelWriterService.writeExecutionProcessReportExcelFile(fileName, allReports, );
     }
 }
