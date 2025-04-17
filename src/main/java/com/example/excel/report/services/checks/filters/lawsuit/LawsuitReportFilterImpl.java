@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Реализация интерфейса {@link LawsuitReportFilter} для генерации отчетов по судебным делам.
- * Этот сервис фильтрует и обрабатывает списки {@link JudicialExcelData} на основе определенных критериев.
+ * Этот сервис фильтрует и обрабатывает списки {@link LawsuitExcelData} на основе определенных критериев.
  */
 @Service
 @Slf4j
@@ -19,9 +19,9 @@ public class LawsuitReportFilterImpl implements LawsuitReportFilter {
     /**
      * Генерирует отчет о поданных исках в указанный период.
      *
-     * @param lawsuitExcelData Список данных судебных дел.
-     * @param start            Дата начала периода для фильтрации.
-     * @param end              Дата окончания периода для фильтрации.
+     * @param lawsuitExcelData список объектов {@link LawsuitExcelData} для фильтрации.
+     * @param start начальная дата диапазона.
+     * @param end конечная дата диапазона.
      * @return Список данных судебных дел, соответствующих критериям фильтрации.
      */
     @Override
@@ -36,7 +36,7 @@ public class LawsuitReportFilterImpl implements LawsuitReportFilter {
     /**
      * Генерирует отчет о дате рассмотрения дел.
      *
-     * @param lawsuitExcelData Список данных судебных дел.
+     * @param lawsuitExcelData список объектов {@link LawsuitExcelData} для фильтрации.
      * @param now              Текущая дата для фильтрации.
      * @return Список данных судебных дел, соответствующих критериям фильтрации.
      */
@@ -52,9 +52,9 @@ public class LawsuitReportFilterImpl implements LawsuitReportFilter {
     /**
      * Генерирует отчет о полученных исполнительных листах в указанный период.
      *
-     * @param lawsuitExcelData Список данных судебных дел.
-     * @param start            Дата начала периода для фильтрации.
-     * @param end              Дата окончания периода для фильтрации.
+     * @param lawsuitExcelData список объектов {@link LawsuitExcelData} для фильтрации.
+     * @param start начальная дата диапазона.
+     * @param end конечная дата диапазона.
      * @return Список данных судебных дел, соответствующих критериям фильтрации.
      */
     @Override
